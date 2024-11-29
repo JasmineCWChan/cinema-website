@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#gitignore
+Node/node_modules
+React/node_modules
+Node/.env
+React/.env
