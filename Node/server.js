@@ -17,7 +17,7 @@ let db;
 async function connectToMongo() {
   try {
     await client.connect();
-    db = client.db("tododb");
+    db = client.db("cinemawebsitedb");
     console.log("Connected to MongoDB");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -61,15 +61,19 @@ app.post("/api/orders", async (req, res) => {
 
 //GET all orders
 
-// app.get("/api/orders", async (req, res) => {
-//   try {
-//     const orders = await db.collection("orders").find().toArray(); 
-//     res.json(orders);
-// } catch (err) {
-//     console.error("Error fetching orders:", err);
-//     res.status(500).send({ message: "Error fetching orders", error: err.message });
-// }
-// });
+app.get("/api", (req, res) => {
+  res.status(200).send({message: "Connection successful"})
+})
+
+app.get("/api/orders", async (req, res) => {
+  try {
+    const orders = await db.collection("orders").find().toArray(); 
+    res.json(orders);
+} catch (err) {
+    console.error("Error fetching orders:", err);
+    res.status(500).send({ message: "Error fetching orders", error: err.message });
+}
+});
 
 //GET from collection("orders") for confirmation page
 app.get("/api/orders/:id", async (req, res) => {
@@ -78,7 +82,7 @@ app.get("/api/orders/:id", async (req, res) => {
         const { id } = req.params;
         
         if(!ObjectId.isValid(id)){
-          return res.status(400).json({ "error": "Invalid concert ID format." });
+          return res.status(400).json({ "error": "Invalid ID format." });
         }
 
         const order = await db.collection("orders").findOne({ _id: new ObjectId(id) });
